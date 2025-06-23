@@ -8,12 +8,7 @@ export interface ImageGenerationPayload {
   orderId: string
   client: string
   email: string
-  phone?: string
-  boutique?: string
-  jewelryType: string
-  styleDescription: string
-  materials: string
-  otherNotes?: string
+  demande: string
   inspirationImages?: string[]
 }
 
@@ -30,8 +25,6 @@ export interface PDFGenerationPayload {
   clientData: {
     name: string
     email: string
-    phone?: string
-    boutique?: string
   }
 }
 

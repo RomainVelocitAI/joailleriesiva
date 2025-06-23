@@ -49,9 +49,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    await AirtableService.updateOrder(orderId, {
-      Status: 'sent'
-    })
+    // Note: Pas de champ Status dans le schéma actuel
+    // await AirtableService.updateOrder(orderId, {
+    //   Status: 'sent'
+    // })
 
     return NextResponse.json({ 
       success: true, 

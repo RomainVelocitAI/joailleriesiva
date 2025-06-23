@@ -35,18 +35,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    await AirtableService.updateOrder(orderId, {
-      'Selected Image': selectedImageIndex + 1
-    })
+    // Note: Pas de champ Selected Image dans le schéma actuel
+    // await AirtableService.updateOrder(orderId, {
+    //   'Selected Image': selectedImageIndex + 1
+    // })
 
     const webhookPayload = {
       orderId,
       selectedImageIndex,
       clientData: {
         name: order.fields.Client,
-        email: order.fields.email || '',
-        phone: order.fields.phone,
-        boutique: order.fields['Nom boutique']
+        email: order.fields.Email || ''
       }
     }
 

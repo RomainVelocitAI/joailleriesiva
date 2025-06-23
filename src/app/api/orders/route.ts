@@ -47,12 +47,7 @@ ${validatedData.otherNotes ? `Notes: ${validatedData.otherNotes}` : ''}`
       orderId: order.id,
       client: orderData.client,
       email: orderData.email,
-      phone: orderData.phone,
-      boutique: orderData.boutique,
-      jewelryType: orderData.jewelryType,
-      styleDescription: orderData.styleDescription,
-      materials: orderData.materials,
-      otherNotes: orderData.otherNotes,
+      demande: orderData.demande,
       inspirationImages: body.inspirationImageUrls || []
     }
 
@@ -66,8 +61,7 @@ ${validatedData.otherNotes ? `Notes: ${validatedData.otherNotes}` : ''}`
     }
 
     if (!webhookResult.success) {
-      await AirtableService.updateOrder(order.id, { Status: 'generating' })
-      console.log('Webhook failed, order marked as generating')
+      console.log('Webhook failed, but continuing (no Status field to update)')
     }
 
     return NextResponse.json({ 
