@@ -6,7 +6,7 @@ import mockData from '@/mocks/data.json'
 
 // Mode développement avec mock data
 const isDevelopment = process.env.NODE_ENV === 'development'
-const useMockMode = isDevelopment && (!process.env.AIRTABLE_API_KEY || process.env.NEXT_PUBLIC_MOCK_MODE === 'true')
+const useMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true'
 
 export async function POST(request: NextRequest) {
   try {

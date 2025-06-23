@@ -4,7 +4,7 @@ import { WebhookService } from '@/lib/webhooks'
 import { editImageSchema } from '@/lib/validations'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
-const useMockMode = isDevelopment && (!process.env.AIRTABLE_API_KEY || process.env.NEXT_PUBLIC_MOCK_MODE === 'true')
+const useMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true'
 
 export async function POST(request: NextRequest) {
   try {

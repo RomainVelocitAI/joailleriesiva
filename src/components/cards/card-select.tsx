@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Edit3, Check } from "lucide-react"
+import { Edit3, Check, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 
 interface CardSelectProps {
-  image: string
+  image: string | null
   isSelected: boolean
   onSelect: () => void
   onEdit: () => void
@@ -46,11 +47,20 @@ export function CardSelect({
       >
         {/* Image Container */}
         <div className="aspect-square relative">
-          <img
-            src={image}
-            alt={`Proposition ${index + 1}`}
-            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
-          />
+          {image ? (
+            <img
+              src={image}
+              alt={`Proposition ${index + 1}`}
+              className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-muted/30">
+              <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <p className="text-sm font-medium">Génération en cours...</p>
+              </div>
+            </div>
+          )}
           
           {/* Overlay */}
           <div className={cn(
@@ -70,29 +80,31 @@ export function CardSelect({
           )}
         </div>
 
-        {/* Edit Button */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ 
-            opacity: isHovered || isSelected ? 1 : 0,
-            x: isHovered || isSelected ? 0 : 20
-          }}
-          transition={{ duration: 0.2 }}
-          className="absolute bottom-3 right-3"
-        >
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation()
-              onEdit()
+        {/* Edit Button - Seulement si image chargée */}
+        {image && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ 
+              opacity: isHovered || isSelected ? 1 : 0,
+              x: isHovered || isSelected ? 0 : 20
             }}
-            className="bg-background/90 backdrop-blur-sm border hover:bg-background/100 transition-all"
+            transition={{ duration: 0.2 }}
+            className="absolute bottom-3 right-3"
           >
-            <Edit3 className="w-3 h-3" />
-            Éditer
-          </Button>
-        </motion.div>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit()
+              }}
+              className="bg-background/90 backdrop-blur-sm border hover:bg-background/100 transition-all"
+            >
+              <Edit3 className="w-3 h-3" />
+              Éditer
+            </Button>
+          </motion.div>
+        )}
 
         {/* Card Label */}
         <div className="absolute top-3 left-3">
@@ -115,7 +127,7 @@ export function CardSelect({
 }
 
 interface ImageGridProps {
-  images: string[]
+  images: (string | null)[]
   selectedIndex: number | null
   onSelect: (index: number) => void
   onEdit: (index: number) => void

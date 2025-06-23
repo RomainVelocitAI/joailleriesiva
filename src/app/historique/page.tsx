@@ -7,11 +7,19 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { OrdersTable } from "@/components/history/orders-table"
+import { ViewOrderModal } from "@/components/modals/view-order-modal"
 import { OrderRecord } from "@/lib/airtable"
 
 export default function HistoriquePage() {
   const [orders, setOrders] = useState<OrderRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [viewModal, setViewModal] = useState<{
+    isOpen: boolean
+    order: OrderRecord | null
+  }>({
+    isOpen: false,
+    order: null
+  })
 
   const fetchOrders = async () => {
     try {
@@ -89,8 +97,13 @@ export default function HistoriquePage() {
   }
 
   const handleView = (orderId: string) => {
-    // TODO: Implémenter la vue détaillée d'une commande
-    console.log('View order:', orderId)
+    const order = orders.find(o => o.id === orderId)
+    if (order) {
+      setViewModal({
+        isOpen: true,
+        order
+      })
+    }
   }
 
   if (isLoading) {
@@ -145,6 +158,13 @@ export default function HistoriquePage() {
           onDelete={handleDelete}
           onSend={handleSend}
           onView={handleView}
+        />
+
+        {/* View Order Modal */}
+        <ViewOrderModal
+          isOpen={viewModal.isOpen}
+          order={viewModal.order}
+          onClose={() => setViewModal({ isOpen: false, order: null })}
         />
       </div>
     </div>

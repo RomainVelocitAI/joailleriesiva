@@ -15,7 +15,7 @@ import { type OrderFormData } from "@/lib/validations"
 interface AppState {
   currentStep: "form" | "images" | "pdf_ready"
   orderId?: string
-  images: string[]
+  images: (string | null)[]
   selectedImageIndex: number | null
   isLoading: boolean
 }
@@ -71,26 +71,38 @@ export default function Home() {
           description: toastMessage
         })
 
-        // Simulation des images générées (toujours en mode démo)
-        setTimeout(() => {
-          setState(prev => ({
-            ...prev,
-            images: [
-              "https://picsum.photos/400/400?random=1",
-              "https://picsum.photos/400/400?random=2", 
-              "https://picsum.photos/400/400?random=3",
-              "https://picsum.photos/400/400?random=4"
-            ]
-          }))
-          
-          addToast({
-            type: "success",
-            title: "Propositions prêtes !",
-            description: result.mockMode 
-              ? "Images de démonstration générées"
-              : "Vos 4 créations personnalisées sont disponibles"
-          })
-        }, 3000)
+        // Initialiser les slots d'images vides
+        setState(prev => ({
+          ...prev,
+          images: [null, null, null, null]
+        }))
+
+        // Simulation des images générées une par une
+        const imageUrls = [
+          "https://picsum.photos/400/400?random=1",
+          "https://picsum.photos/400/400?random=2", 
+          "https://picsum.photos/400/400?random=3",
+          "https://picsum.photos/400/400?random=4"
+        ]
+
+        imageUrls.forEach((url, index) => {
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              images: prev.images.map((img, i) => i === index ? url : img)
+            }))
+            
+            if (index === imageUrls.length - 1) {
+              addToast({
+                type: "success",
+                title: "Propositions prêtes !",
+                description: result.mockMode 
+                  ? "Images de démonstration générées"
+                  : "Vos 4 créations personnalisées sont disponibles"
+              })
+            }
+          }, 1000 + (index * 1500)) // 1s, 2.5s, 4s, 5.5s
+        })
         
       } else {
         throw new Error('Erreur lors de la création')
@@ -110,10 +122,13 @@ export default function Home() {
   }
 
   const handleImageEdit = (index: number) => {
+    const image = state.images[index]
+    if (!image) return
+    
     setEditModal({
       isOpen: true,
       imageIndex: index,
-      currentImage: state.images[index]
+      currentImage: image
     })
   }
 
@@ -143,7 +158,7 @@ export default function Home() {
           setState(prev => ({
             ...prev,
             images: prev.images.map((img, i) => 
-              i === imageIndex ? `/api/placeholder/400/${400 + Math.random() * 100}` : img
+              i === imageIndex ? `https://picsum.photos/400/400?random=${Date.now()}` : img
             )
           }))
           
