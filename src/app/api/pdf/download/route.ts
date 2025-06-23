@@ -60,8 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Générer le PDF
-    const pdfBlob = await PDFGenerator.generateProposal(pdfData)
-    const pdfBuffer = Buffer.from(await pdfBlob.arrayBuffer())
+    const pdfBuffer = await PDFGenerator.generateProposal(pdfData)
     
     // Créer un nom de fichier
     const filename = `proposition_${order.fields.Client.replace(/\s+/g, '_')}_${Date.now()}.pdf`
