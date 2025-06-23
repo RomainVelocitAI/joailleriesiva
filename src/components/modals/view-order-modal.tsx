@@ -96,7 +96,8 @@ export function ViewOrderModal({ isOpen, order, onClose }: ViewOrderModalProps) 
     setIsLoading(true)
     
     try {
-      const response = await fetch('/api/webhooks/generate-pdf', {
+      // Générer et télécharger directement le PDF
+      const response = await fetch('/api/pdf/download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -106,16 +107,24 @@ export function ViewOrderModal({ isOpen, order, onClose }: ViewOrderModalProps) 
       })
 
       if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.style.display = 'none'
+        a.href = url
+        a.download = `proposition_${order.fields.Client.replace(/\s+/g, '_')}_${Date.now()}.pdf`
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+
         addToast({
           type: "success",
-          title: "PDF en cours de génération",
-          description: "Votre nouvelle proposition sera bientôt prête"
+          title: "PDF généré avec succès !",
+          description: "Votre proposition a été téléchargée"
         })
         
-        setTimeout(() => {
-          setIsLoading(false)
-          window.location.reload()
-        }, 3000)
+        setIsLoading(false)
       }
     } catch (error) {
       addToast({

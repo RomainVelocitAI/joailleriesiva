@@ -5,7 +5,6 @@ import { PDFGenerator } from '@/lib/pdf-generator'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    
     const { orderId, selectedImageIndex } = body
     
     if (!orderId || typeof selectedImageIndex !== 'number') {
@@ -15,6 +14,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Récupérer la commande
     const order = await AirtableService.getOrder(orderId)
     
     if (!order) {
@@ -61,26 +61,23 @@ export async function POST(request: NextRequest) {
 
     // Générer le PDF
     const pdfBlob = await PDFGenerator.generateProposal(pdfData)
-    
-    // Convertir le blob en buffer pour l'upload
     const pdfBuffer = Buffer.from(await pdfBlob.arrayBuffer())
     
-    // Créer un nom de fichier unique
+    // Créer un nom de fichier
     const filename = `proposition_${order.fields.Client.replace(/\s+/g, '_')}_${Date.now()}.pdf`
     
-    // Simuler l'upload vers Airtable (pour l'instant, on retourne juste le succès)
-    // TODO: Implémenter l'upload réel vers Airtable
-    console.log(`PDF généré: ${filename}, taille: ${pdfBuffer.length} bytes`)
-
-    return NextResponse.json({ 
-      success: true, 
-      message: 'PDF generated successfully',
-      filename,
-      pdfGenerated: true
+    // Retourner le PDF en tant que réponse téléchargeable
+    return new NextResponse(pdfBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': pdfBuffer.length.toString(),
+      },
     })
 
   } catch (error) {
-    console.error('Error generating PDF:', error)
+    console.error('Error downloading PDF:', error)
     
     return NextResponse.json(
       { success: false, error: 'Failed to generate PDF' },

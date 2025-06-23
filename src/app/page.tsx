@@ -266,7 +266,34 @@ export default function Home() {
           description: "Votre proposition sera bientôt prête"
         })
 
-        setTimeout(() => {
+        // Déclencher le téléchargement automatique du PDF
+        setTimeout(async () => {
+          try {
+            const downloadResponse = await fetch('/api/pdf/download', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: state.orderId,
+                selectedImageIndex: state.selectedImageIndex
+              })
+            })
+
+            if (downloadResponse.ok) {
+              const blob = await downloadResponse.blob()
+              const url = window.URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.style.display = 'none'
+              a.href = url
+              a.download = `proposition_${Date.now()}.pdf`
+              document.body.appendChild(a)
+              a.click()
+              window.URL.revokeObjectURL(url)
+              document.body.removeChild(a)
+            }
+          } catch (error) {
+            console.error('Error downloading PDF:', error)
+          }
+
           setState(prev => ({ 
             ...prev, 
             currentStep: "pdf_ready",
@@ -276,9 +303,9 @@ export default function Home() {
           addToast({
             type: "success",
             title: "Proposition finalisée !",
-            description: "Votre PDF est disponible dans l'historique"
+            description: "Votre PDF a été téléchargé automatiquement"
           })
-        }, 3000)
+        }, 2000)
       }
     } catch (error) {
       addToast({
