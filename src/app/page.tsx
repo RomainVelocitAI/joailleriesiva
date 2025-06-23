@@ -77,32 +77,33 @@ export default function Home() {
           images: [null, null, null, null]
         }))
 
-        // Simulation des images générées une par une
-        const imageUrls = [
-          "https://picsum.photos/400/400?random=1",
-          "https://picsum.photos/400/400?random=2", 
-          "https://picsum.photos/400/400?random=3",
-          "https://picsum.photos/400/400?random=4"
-        ]
+        // En mode mock, simuler la génération d'images après un délai
+        if (result.mockMode) {
+          const imageUrls = [
+            "https://picsum.photos/400/400?random=1",
+            "https://picsum.photos/400/400?random=2", 
+            "https://picsum.photos/400/400?random=3",
+            "https://picsum.photos/400/400?random=4"
+          ]
 
-        imageUrls.forEach((url, index) => {
-          setTimeout(() => {
-            setState(prev => ({
-              ...prev,
-              images: prev.images.map((img, i) => i === index ? url : img)
-            }))
-            
-            if (index === imageUrls.length - 1) {
-              addToast({
-                type: "success",
-                title: "Propositions prêtes !",
-                description: result.mockMode 
-                  ? "Images de démonstration générées"
-                  : "Vos 4 créations personnalisées sont disponibles"
-              })
-            }
-          }, 1000 + (index * 1500)) // 1s, 2.5s, 4s, 5.5s
-        })
+          imageUrls.forEach((url, index) => {
+            setTimeout(() => {
+              setState(prev => ({
+                ...prev,
+                images: prev.images.map((img, i) => i === index ? url : img)
+              }))
+              
+              if (index === imageUrls.length - 1) {
+                addToast({
+                  type: "success",
+                  title: "Propositions prêtes !",
+                  description: "Images de démonstration générées"
+                })
+              }
+            }, 1000 + (index * 1500)) // 1s, 2.5s, 4s, 5.5s
+          })
+        }
+        // En mode production, les images seront mises à jour par les webhooks n8n
         
       } else {
         throw new Error('Erreur lors de la création')
