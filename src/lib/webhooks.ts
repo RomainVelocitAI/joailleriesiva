@@ -15,6 +15,7 @@ export interface ImageGenerationPayload {
 export interface ImageEditPayload {
   orderId: string
   imageIndex: number
+  imageField: string // Ajout du nom de la colonne (Image 1, Image 2, etc.)
   editInstruction: string
   currentImageUrl: string
 }
@@ -22,6 +23,8 @@ export interface ImageEditPayload {
 export interface PDFGenerationPayload {
   orderId: string
   selectedImageIndex: number
+  selectedImageField: string // Ajout du nom de la colonne
+  selectedImageUrl: string
   clientData: {
     name: string
     email: string

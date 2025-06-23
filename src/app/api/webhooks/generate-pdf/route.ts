@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
     const webhookPayload = {
       orderId,
       selectedImageIndex,
+      selectedImageField, // Ajout du nom de la colonne (Image 1, Image 2, etc.)
+      selectedImageUrl,
       clientData: {
         name: order.fields.Client,
         email: order.fields.Email || ''

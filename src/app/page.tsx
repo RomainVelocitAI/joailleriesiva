@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { History, Sparkles, ArrowRight, AlertCircle } from "lucide-react"
 import Link from "next/link"
@@ -28,6 +28,7 @@ export default function Home() {
     selectedImageIndex: null,
     isLoading: false
   })
+  const pollingRef = useRef<NodeJS.Timeout | null>(null)
   
   const isDevelopment = process.env.NODE_ENV === 'development'
   const isProductionReady = process.env.AIRTABLE_API_KEY && process.env.WEBHOOK_IMAGE_GENERATION
@@ -41,6 +42,70 @@ export default function Home() {
     imageIndex: 0,
     currentImage: ""
   })
+
+  // Fonction pour récupérer les images mises à jour depuis Airtable
+  const pollForImages = async () => {
+    if (!state.orderId || state.currentStep !== "images") return
+
+    try {
+      const response = await fetch(`/api/orders/${state.orderId}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.order) {
+          const newImages = [
+            data.order.fields['Image 1']?.[0]?.url || null,
+            data.order.fields['Image 2']?.[0]?.url || null,
+            data.order.fields['Image 3']?.[0]?.url || null,
+            data.order.fields['Image 4']?.[0]?.url || null,
+          ]
+          
+          // Mettre à jour seulement si les images ont changé
+          setState(prev => {
+            const hasChanged = newImages.some((img, index) => img !== prev.images[index])
+            if (hasChanged) {
+              // Vérifier si toutes les images sont maintenant disponibles
+              const allImagesLoaded = newImages.every(img => img !== null)
+              if (allImagesLoaded && newImages.some(img => img !== null)) {
+                addToast({
+                  type: "success",
+                  title: "Propositions prêtes !",
+                  description: "Vos 4 créations personnalisées sont disponibles"
+                })
+              }
+              return { ...prev, images: newImages }
+            }
+            return prev
+          })
+        }
+      }
+    } catch (error) {
+      console.error('Error polling for images:', error)
+    }
+  }
+
+  // Démarrer le polling quand on passe à l'étape images
+  useEffect(() => {
+    if (state.currentStep === "images" && state.orderId) {
+      // Démarrer le polling toutes les 3 secondes
+      pollingRef.current = setInterval(pollForImages, 3000)
+      
+      return () => {
+        if (pollingRef.current) {
+          clearInterval(pollingRef.current)
+          pollingRef.current = null
+        }
+      }
+    }
+  }, [state.currentStep, state.orderId])
+
+  // Nettoyer le polling quand le composant se démonte
+  useEffect(() => {
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current)
+      }
+    }
+  }, [])
 
   const handleFormSubmit = async (data: OrderFormData & { inspirationImages?: File[] }) => {
     setState(prev => ({ ...prev, isLoading: true }))

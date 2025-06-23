@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
     const webhookPayload = {
       orderId,
       imageIndex,
+      imageField: currentImageField, // Ajout du nom de la colonne
       editInstruction: validatedInstruction.instruction,
       currentImageUrl
     }
