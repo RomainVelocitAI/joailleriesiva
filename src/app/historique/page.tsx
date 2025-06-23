@@ -59,7 +59,7 @@ export default function HistoriquePage() {
 
   const handleSend = async (orderId: string) => {
     const order = orders.find(o => o.id === orderId)
-    const email = order?.fields.email
+    const email = order?.fields.Email
     
     if (!email) {
       alert('Aucun email trouvé pour cette commande')

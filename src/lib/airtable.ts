@@ -17,28 +17,13 @@ export interface OrderRecord {
     'Image 4'?: { url: string }[];
     'Image collection'?: { url: string }[];
     PDF?: { url: string }[];
-    email?: string;
-    phone?: string;
-    'Nom boutique'?: string;
-    'Type bijou'?: string;
-    'Style recherché'?: string;
-    'Matériaux'?: string;
-    'Autres précisions'?: string;
-    Status?: 'generating' | 'images_ready' | 'pdf_ready' | 'sent';
-    'Selected Image'?: number;
-    'Created At'?: string;
+    Email?: string;
   };
 }
 
 export interface CreateOrderData {
   client: string;
   email: string;
-  phone?: string;
-  boutique?: string;
-  jewelryType: string;
-  styleDescription: string;
-  materials: string;
-  otherNotes?: string;
   demande: string;
 }
 
@@ -49,15 +34,7 @@ export class AirtableService {
         fields: {
           Client: data.client,
           Demande: data.demande,
-          email: data.email,
-          phone: data.phone,
-          'Nom boutique': data.boutique,
-          'Type bijou': data.jewelryType,
-          'Style recherché': data.styleDescription,
-          'Matériaux': data.materials,
-          'Autres précisions': data.otherNotes,
-          Status: 'generating',
-          'Created At': new Date().toISOString(),
+          Email: data.email,
         }
       }
     ]);
@@ -66,9 +43,7 @@ export class AirtableService {
   }
 
   static async getOrders(): Promise<OrderRecord[]> {
-    const records = await table.select({
-      sort: [{ field: 'Created At', direction: 'desc' }]
-    }).all();
+    const records = await table.select().all();
 
     return records as unknown as OrderRecord[];
   }

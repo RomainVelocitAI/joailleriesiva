@@ -82,26 +82,6 @@ export function OrdersTable({
 
   const columns: ColumnDef<OrderRecord>[] = [
     {
-      accessorKey: "fields.Created At",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="h-8 p-0 hover:bg-transparent"
-          >
-            <Calendar className="mr-2 h-4 w-4" />
-            Date
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => {
-        const date = row.original.fields["Created At"]
-        return date ? new Date(date).toLocaleDateString('fr-FR') : '-'
-      },
-    },
-    {
       accessorKey: "fields.Client",
       header: ({ column }) => {
         return (
@@ -118,23 +98,19 @@ export function OrdersTable({
       },
     },
     {
-      accessorKey: "fields.Type bijou",
-      header: "Type",
+      accessorKey: "fields.Email",
+      header: "Email",
       cell: ({ row }) => {
-        const type = row.original.fields["Type bijou"]
-        return type || '-'
+        const email = row.original.fields.Email
+        return email || '-'
       },
     },
     {
-      accessorKey: "fields.Status",
-      header: "Statut",
+      accessorKey: "fields.Demande",
+      header: "Demande",
       cell: ({ row }) => {
-        const status = row.original.fields.Status || 'generating'
-        return (
-          <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
-            {getStatusLabel(status)}
-          </span>
-        )
+        const demande = row.original.fields.Demande
+        return demande ? demande.substring(0, 50) + '...' : '-'
       },
     },
     {
@@ -142,8 +118,8 @@ export function OrdersTable({
       header: "Actions",
       cell: ({ row }) => {
         const order = row.original
-        const status = order.fields.Status || 'generating'
         const hasPDF = !!order.fields.PDF?.[0]?.url
+        const hasImages = !!(order.fields['Image 1']?.[0]?.url)
         
         return (
           <div className="flex items-center gap-1">
@@ -167,7 +143,7 @@ export function OrdersTable({
               </Button>
             )}
             
-            {hasPDF && status !== 'sent' && (
+            {hasImages && (
               <Button
                 variant="ghost"
                 size="sm"

@@ -23,12 +23,6 @@ ${validatedData.otherNotes ? `Notes: ${validatedData.otherNotes}` : ''}`
     const orderData = {
       client: `${validatedData.firstName} ${validatedData.lastName}`,
       email: validatedData.email,
-      phone: validatedData.phone,
-      boutique: validatedData.boutiqueName,
-      jewelryType: validatedData.jewelryType,
-      styleDescription: validatedData.styleDescription,
-      materials: validatedData.materials,
-      otherNotes: validatedData.otherNotes,
       demande
     }
 
