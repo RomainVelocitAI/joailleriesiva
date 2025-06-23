@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  siva-pdf-service:
+    build: .
+    container_name: siva-pdf-service
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.siva-pdf.rule=Host(\`pdf.votre-domaine.com\`)"
+      - "traefik.http.routers.siva-pdf.tls=true"
+      - "traefik.http.routers.siva-pdf.tls.certresolver=letsencrypt"
+      - "traefik.http.services.siva-pdf.loadbalancer.server.port=3001"
+      - "traefik.docker.network=traefik"
+
+networks:
+  traefik:
+    external: true
