@@ -1,0 +1,79 @@
+{
+  "orders": [
+    {
+      "id": "recAbc123",
+      "fields": {
+        "Client": "Marie Dubois",
+        "Demande": "Bague de fiançailles moderne avec diamant central et design épuré",
+        "email": "marie.dubois@email.com",
+        "phone": "01 23 45 67 89",
+        "Nom boutique": "Siva Paris 16ème",
+        "Type bijou": "Bague",
+        "Style recherché": "Design moderne et épuré avec une touche d'élégance classique",
+        "Matériaux": "Or blanc, diamant",
+        "Autres précisions": "Pour une demande en mariage, budget environ 3000€",
+        "Status": "pdf_ready",
+        "Selected Image": 2,
+        "Created At": "2024-01-15T10:30:00.000Z",
+        "Image 1": [{"url": "https://picsum.photos/400/400?random=1"}],
+        "Image 2": [{"url": "https://picsum.photos/400/400?random=2"}],
+        "Image 3": [{"url": "https://picsum.photos/400/400?random=3"}],
+        "Image 4": [{"url": "https://picsum.photos/400/400?random=4"}],
+        "PDF": [{"url": "https://example.com/proposal-123.pdf"}]
+      }
+    },
+    {
+      "id": "recDef456",
+      "fields": {
+        "Client": "Jean Martin",
+        "Demande": "Collier personnalisé pour anniversaire de mariage",
+        "email": "jean.martin@email.com",
+        "phone": "06 12 34 56 78",
+        "Nom boutique": "Siva Lyon",
+        "Type bijou": "Collier",
+        "Style recherché": "Vintage avec des perles et des détails raffinés",
+        "Matériaux": "Or jaune, perles",
+        "Status": "images_ready",
+        "Created At": "2024-01-14T15:45:00.000Z",
+        "Image 1": [{"url": "https://picsum.photos/400/400?random=5"}],
+        "Image 2": [{"url": "https://picsum.photos/400/400?random=6"}],
+        "Image 3": [{"url": "https://picsum.photos/400/400?random=7"}],
+        "Image 4": [{"url": "https://picsum.photos/400/400?random=8"}]
+      }
+    },
+    {
+      "id": "recGhi789",
+      "fields": {
+        "Client": "Sophie Laurent",
+        "Demande": "Bracelet moderne pour un cadeau d'affaires",
+        "email": "sophie.laurent@email.com",
+        "Type bijou": "Bracelet",
+        "Style recherché": "Design contemporain et professionnel",
+        "Matériaux": "Argent, pierres semi-précieuses",
+        "Status": "generating",
+        "Created At": "2024-01-13T09:15:00.000Z"
+      }
+    },
+    {
+      "id": "recJkl012",
+      "fields": {
+        "Client": "Pierre Durand",
+        "Demande": "Boucles d'oreilles pour ma fille",
+        "email": "pierre.durand@email.com",
+        "phone": "07 89 12 34 56",
+        "Nom boutique": "Siva Marseille",
+        "Type bijou": "Boucles d'oreilles",
+        "Style recherché": "Délicat et jeune, adapté à une adolescente",
+        "Matériaux": "Or rose, petites perles",
+        "Status": "sent",
+        "Selected Image": 1,
+        "Created At": "2024-01-12T14:20:00.000Z",
+        "Image 1": [{"url": "https://picsum.photos/400/400?random=9"}],
+        "Image 2": [{"url": "https://picsum.photos/400/400?random=10"}],
+        "Image 3": [{"url": "https://picsum.photos/400/400?random=11"}],
+        "Image 4": [{"url": "https://picsum.photos/400/400?random=12"}],
+        "PDF": [{"url": "https://example.com/proposal-456.pdf"}]
+      }
+    }
+  ]
+}
